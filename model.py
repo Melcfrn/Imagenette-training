@@ -10,6 +10,10 @@ import torch.nn as nn
 
 
 class Model(nn.Module):
+    """
+    This class implements a neural network from PyTorch framework
+    """
+
     def __init__(self):
         super().__init__()
         self.kernel_size = 5

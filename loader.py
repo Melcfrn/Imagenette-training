@@ -12,6 +12,10 @@ import multiprocessing
 
 
 class Loader():
+    """
+    This class implements a dataloader for Pytorch models
+    """
+
     def __init__(self, location, transform, batch_size, shuffle):
         self.location = location
         self.transform = transform
