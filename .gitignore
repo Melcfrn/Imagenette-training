@@ -1,2 +1,6 @@
 imagenette2-160/
+imagenette2-320/
 __pycache__/
+
+first_model.pt
+first_model_320.pt
