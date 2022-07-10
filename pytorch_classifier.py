@@ -51,9 +51,9 @@ class PytorchClassifier():
                 loss.backward()
                 self.optimizer.step()
                 running_loss += loss.item()
-                if i % self.batch_size == self.batch_size - 1:
+                if i % 10 == 9:
                     print('[{},{:5d}] loss: {:.3f}'.format(
-                        epoch + 1, i + 1, running_loss / self.batch_size))
+                        epoch + 1, i + 1, running_loss / 9))
                     running_loss = 0.0
         print('Finished Training')
 

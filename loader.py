@@ -29,5 +29,5 @@ class Loader():
             dataset=set,
             batch_size=self.batch_size,
             shuffle=self.shuffle,
-            num_workers=multiprocessing.cpu_count()-1)
+            num_workers=0)
         return loader
