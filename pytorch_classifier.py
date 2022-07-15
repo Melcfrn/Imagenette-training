@@ -4,6 +4,9 @@
 
 import torch
 import os
+from time import sleep
+from tqdm import tqdm
+from networks_to_load import cifar_conv
 
 ###############################################################################
 # Pytorch Classifier                                                          #
@@ -21,7 +24,7 @@ class PytorchClassifier():
         model,
         criterion,
         optimizer,
-        batch_size,
+        batch_size=64,
         device="cpu"
                  ):
         self.model = model
@@ -41,8 +44,9 @@ class PytorchClassifier():
 
         self.model.train()
         for epoch in range(nb_epochs):
-            running_loss = 0.0
-            for i, data in enumerate(dataset, 0):
+            loop = tqdm(dataset, ncols=100, initial=1)
+            # running_loss = 0.0
+            for i, data in enumerate(loop, 0):
                 inputs, labels = data[0].to(
                     self.device), data[1].to(self.device)
                 self.optimizer.zero_grad()
@@ -50,11 +54,15 @@ class PytorchClassifier():
                 loss = self.criterion(outputs, labels)
                 loss.backward()
                 self.optimizer.step()
-                running_loss += loss.item()
-                if i % 10 == 9:
-                    print('[{},{:5d}] loss: {:.3f}'.format(
-                        epoch + 1, i + 1, running_loss / 9))
-                    running_loss = 0.0
+                # running_loss += loss.item()
+                _, predicted = torch.max(outputs.data, 1)
+                total = labels.size(0)
+                loop.set_description(f"Epoch [{epoch}/{nb_epochs}]")
+                loop.set_postfix(loss=loss.item(), acc=(predicted == labels).sum().item()/total)
+                # if i % 100 == 99:
+                #     print('[{},{:5d}] loss: {:.3f}'.format(
+                #         epoch + 1, i + 1, running_loss / 100))
+                #     running_loss = 0.0
         print('Finished Training')
 
     def predict(self, dataset):
@@ -81,6 +89,9 @@ class PytorchClassifier():
     def save(self, filename, path=None):
         """
         Save a model to file in the format of Pytorch framework
+
+        :param filename: Name of the file where is save the model.
+        :param path: path where to save the file.
         """
 
         self.model.eval()
@@ -91,3 +102,25 @@ class PytorchClassifier():
 
         torch.save(self.model.state_dict(), complete_path)
         print('Model saved to: {}'.format(complete_path))
+
+    def load(self, model, path_to_file):
+        """
+        Load a pytorch saved model (like .pt). You need to define your model in
+        the networks_to_load.py file and call it in the function as var 'model'.
+
+        :param model: Architecture of the model to load.
+        :param path_to_file: path to the file where is the model to load.
+        """
+        net = model
+        net.load_state_dict(torch.load(path_to_file))
+        net.eval()
+        return net
+
+#     def printer(self, running_loss, epoch, nb_epochs):
+
+# for i in tqdm(range(10)):
+#     a = 2
+#         if i % 100 == 99:
+#             print('[{},{:5d}] loss: {:.3f}'.format(
+#                 epoch + 1, i + 1, running_loss / 100))
+#             running_loss = 0.0

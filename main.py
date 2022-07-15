@@ -14,8 +14,8 @@ from resnet_model import ResNet5, ResNet9, BasicBlock
 # Dataset + parameters                                                        #
 ###############################################################################
 
-batch_size = 64
-nb_epochs = 30
+batch_size = 32
+nb_epochs = 20
 
 size = 160
 transform = transforms.Compose(
@@ -37,10 +37,11 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 # def resnet4b():
 #     return ResNet9(BasicBlock, num_blocks=2, in_planes=16, bn=False, last_layer="dense")
-net = ResNet9(BasicBlock, num_blocks=2, in_planes=16, bn=False, last_layer="dense")
+net = Model(3, [32, 64, 128], [512], 10, activation='relu')
+# net = ResNet9(BasicBlock, num_blocks=2, in_planes=16, bn=False, last_layer="dense")
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(net.parameters(), lr=0.001)
-
+print(net)
 ###############################################################################
 # Training                                                                    #
 ###############################################################################
@@ -53,8 +54,8 @@ classifier = PytorchClassifier(model=net,
                                )
 
 classifier.fit(dataset=trainloader, nb_epochs=nb_epochs)
-print("Accuracy on trainset to watch overfitting : \n")
-classifier.predict(dataset=trainloader)
-print("Accuracy on testset : \n")
+# print("Accuracy on trainset to watch overfitting : \n")
+# classifier.predict(dataset=trainloader)
+# print("Accuracy on testset : \n")
 classifier.predict(dataset=testloader)
 classifier.save(filename=f"first_model_{size}.pt")
