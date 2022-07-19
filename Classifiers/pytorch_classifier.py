@@ -6,14 +6,15 @@ import torch
 import os
 from time import sleep
 from tqdm import tqdm
-from networks_to_load import cifar_conv
+from DefModels.networks_to_load import cifar_conv
+from Classifiers.classifier import Classifier
 
 ###############################################################################
 # Pytorch Classifier                                                          #
 ###############################################################################
 
 
-class PytorchClassifier():
+class PytorchClassifier(Classifier):
     """
     This class implements a neural network classifier
     with the PyTorch framework
@@ -86,7 +87,7 @@ class PytorchClassifier():
         print('Accuracy of the network on the {} test images: {} %'.format(
             total, 100 * correct // total))
 
-    def save(self, filename, path=None):
+    def save(self, filename, path="Networks"):
         """
         Save a model to file in the format of Pytorch framework
 
@@ -95,10 +96,7 @@ class PytorchClassifier():
         """
 
         self.model.eval()
-        if path is None:
-            complete_path = filename
-        else:
-            complete_path = os.path.join(path, filename)
+        complete_path = os.path.join(path, filename)
 
         torch.save(self.model.state_dict(), complete_path)
         print('Model saved to: {}'.format(complete_path))

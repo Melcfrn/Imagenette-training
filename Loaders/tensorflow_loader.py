@@ -2,32 +2,38 @@
 # Packages                                                                    #
 ###############################################################################
 
-import torchvision
-import torch
-import multiprocessing
+from msilib import Directory
+import tensorflow as tf
+from tensorflow import keras
+from Loaders.loader import Loader
 
 ###############################################################################
 # Data Loader                                                                 #
 ###############################################################################
 
 
-class Loader():
+class TensorflowLoader(Loader):
     """
-    This class implements a dataloader for Pytorch models
+    This class implements a dataloader for Tensorflow models
     """
 
-    def __init__(self, location, transform, batch_size, shuffle):
+    def __init__(self, location, size, batch_size, shuffle, dataaug):
         self.location = location
-        self.transform = transform
+        self.size = size
         self.batch_size = batch_size
         self.shuffle = shuffle
+        self.dataaug=dataaug
 
     def get_dataset(self):
-        set = torchvision.datasets.ImageFolder(
-            root=self.location, transform=self.transform)
-        loader = torch.utils.data.DataLoader(
-            dataset=set,
+        loader = tf.keras.preprocessing.image_dataset_from_directory(
+            directory=self.location,
+            label_mode='categorical',
+            image_size=(self.size, self.size),
             batch_size=self.batch_size,
             shuffle=self.shuffle,
-            num_workers=0)
+        )
+
+        loader = loader.map(lambda x, y: (self.dataaug(x, training=True), y))
+
+        loader = loader.prefetch(buffer_size=self.size)
         return loader
