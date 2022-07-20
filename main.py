@@ -12,7 +12,8 @@ from Classifiers.pytorch_classifier import PytorchClassifier
 from DefModels.resnet_model import ResNet5, ResNet9, BasicBlock
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import layers, Input
+from tensorflow.keras import layers
+from tensorflow.keras.layers import Input
 
 from Loaders.tensorflow_loader import TensorflowLoader
 from Classifiers.tensorflow_classifier import TensorflowClassifier
@@ -22,7 +23,7 @@ from Classifiers.tensorflow_classifier import TensorflowClassifier
 ###############################################################################
 
 batch_size = 32
-nb_epochs = 20
+nb_epochs = 10
 
 size = 160
 

@@ -4,8 +4,8 @@
 
 import torch
 import torch.nn as nn
-from tensorflow.keras.models import Sequential, Input
-from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Input
 
 ########################
 # PYTORCH              #
