@@ -1,0 +1,27 @@
+aim:
+  train: True # True if you want to train a model
+  eval: True # True if you want to evaluate a model
+  inference: False # True if you want to infer on a model
+  transfer_learning: False # True if you want to transfer learning a model
+  save: True
+data:
+  root_train: "imagenette2-160/train" # Path to train dataset
+  root_test: "imagenette2-160/val" # Path to test dataset
+parameters:
+  batch_size: 32 # Batch_size for training
+  nb_epochs: 20 # Number of epochs of training
+  shuffle: True # True if you want to shuffle the training dataset
+  device: cpu # Device you want to use for training/testing/inference/transfer
+  criterion: CrossEntropyLoss # The loss you want to use. Available : CrossEntropyLoss
+  optimizer: 
+    type: Adam # The optimizer you want to use. Available : Adam
+    lr: 0.001 # The learning rate for the optimizer
+transformations:
+  resize: [160, 160] # The size of your images
+  means: [0.485, 0.456, 0.406] # The means of your dataset
+  std: [0.229, 0.224, 0.225] # The std of your dataset
+model:
+  framework: Pytorch # Pytorch or Tensorflow
+  path: None # Path to the model (eval/inference/transfer)
+  type: imagenette_conv # The kind of model you want to use defined in DefModels
+  save_name: imagenette_model.pt

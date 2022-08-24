@@ -4,7 +4,11 @@
 
 import torch
 import torch.nn as nn
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Input
 
+########################
+# PYTORCH              #
 ###############################################################################
 # Some functions                                                              #
 ###############################################################################
@@ -84,6 +88,31 @@ class Model(nn.Module):
         x = self.decoder(x)
         
         return x
+
+
+
+########################
+# TENSORFLOW           #
+###############################################################################
+# Some functions                                                              #
+###############################################################################
+
+def ModelTF(image_size):
+    model = Sequential()
+    model.add(Input(shape=(*image_size, 3)))  # 250x250 RGB images
+    model.add(Conv2D(32, 5, activation="relu"))
+    model.add(Conv2D(64, 5, activation="relu"))
+    model.add(MaxPooling2D(2))
+    model.add(Flatten())
+    model.add(Dense(units=512, activation='relu'))
+    model.add(Dense(units=10, activation='softmax'))
+    return model
+
+
+
+
+
+
 
 
 # class Model(nn.Module):
